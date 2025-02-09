@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #222;
+    color: white;
+}
+
+/* Titolo Pokédex con effetto luminoso */
+#pokedex-title {
+    font-size: 3rem;
+    color: red;
+    text-shadow: 0 0 10px red, 0 0 20px yellow;
+    animation: glow 1.5s infinite alternate;
+}
+
+/* Effetto glow */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px red, 0 0 20px yellow;
+    }
+    to {
+        text-shadow: 0 0 15px yellow, 0 0 30px orange;
+    }
+}
+
+/* Contenitori ricerca e filtro */
+.search-container {
+    margin: 10px 0;
+}
+
+/* Pulsanti */
+.btn {
+    background-color: #ffcc00;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #ff9900;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px yellow;
+}
+
+.btn:active {
+    transform: scale(0.9);
+}
+
+/* Select dropdown */
+select {
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+select:hover {
+    background-color: #333;
+    color: white;
+}
+
+/* Layout Pokémon */
+.pokemon-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    padding: 20px;
+    justify-content: center;
+}
+
+.pokemon {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 15px;
+    transition: transform 0.3s ease;
+}
+
+.pokemon img {
+    width: 100px;
+    height: 100px;
+    transition: transform 0.3s, filter 0.3s;
+}
+
+/* Animazione immagini Pokémon */
+.pokemon img:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 10px yellow);
+}

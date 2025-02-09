@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokédex</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+	<!-- Pulsanti Login/Registrazione e Info Utente -->
+	<div class="auth-buttons">
+		<div id="user-status">
+			<button onclick="location.href='login.html'" id="loginBtn">Login</button>
+			<button onclick="location.href='register.html'" id="registerBtn">Registrati</button>
+			<span id="userInfo" style="display: none"> Benvenuto, <span
+				id="userNickname"></span>!
+				<button onclick="handleLogout()" id="logoutBtn">Logout</button>
+			</span>
+		</div>
+	</div>
+
+	<!-- Titolo con effetto luminoso -->
+	<h1 id="pokedex-title">Pokédex</h1>
+
+	<p>🔍 Puoi cercare un Pokémon per nome oppure filtrare per tipo, ma
+		non entrambi.</p>
+
+	<div class="search-container">
+		<label for="search-name">Cerca per nome:</label> <input type="text"
+			id="search-name" placeholder="Es. Pikachu"
+			oninput="disableTypeFilter()">
+		<button class="btn" onclick="searchPokemons()">🔎 Cerca</button>
+	</div>
+
+	<div class="search-container">
+		<label for="search-type">Filtra per tipo:</label> <select
+			id="search-type" onchange="disableNameFilter(); searchPokemons()">
+			<option value="">Tutti i tipi</option>
+			<option value="normal">⚪ Normale</option>
+			<option value="fire">🔥 Fuoco</option>
+			<option value="water">💧 Acqua</option>
+			<option value="grass">🌿 Erba</option>
+			<option value="electric">⚡ Elettrico</option>
+			<option value="ice">❄️ Ghiaccio</option>
+			<option value="fighting">🥊 Lotta</option>
+			<option value="poison">☠️ Veleno</option>
+			<option value="ground">🌍 Terra</option>
+			<option value="flying">🕊️ Volante</option>
+			<option value="psychic">🔮 Psico</option>
+			<option value="bug">🐛 Insetto</option>
+			<option value="rock">🪨 Roccia</option>
+			<option value="ghost">👻 Spettro</option>
+			<option value="dragon">🐉 Drago</option>
+			<option value="dark">🌑 Buio</option>
+			<option value="steel">🔩 Acciaio</option>
+			<option value="fairy">✨ Folletto</option>
+		</select>
+	</div>
+
+	<div id="pokemon-list" class="pokemon-list"></div>
+
+	<script>
+        function disableTypeFilter() {
+            document.getElementById('search-type').selectedIndex = 0;
+        }
+
+        function disableNameFilter() {
+            document.getElementById('search-name').value = '';
+        }
+
+        function searchPokemons() {
+            const nameFilter = document.getElementById('search-name').value.toLowerCase();
+            const typeFilter = document.getElementById('search-type').value.toLowerCase();
+
+            let url = '/api/pokemons?';
+            if (nameFilter) {
+                url += `name=${nameFilter}`;
+            } else if (typeFilter) {
+                url += `type=${typeFilter}`;
+            }
+
+            fetch(url)
+                .then(response => response.json())
+                .then(pokemons => {
+                    const pokemonListDiv = document.getElementById('pokemon-list');
+                    pokemonListDiv.innerHTML = '';
+
+                    if (pokemons.length === 0) {
+                        pokemonListDiv.innerHTML = "<p>⚠️ Nessun Pokémon trovato.</p>";
+                        return;
+                    }
+
+                    pokemons.forEach(pokemon => {
+                        const pokemonDiv = document.createElement('div');
+                        pokemonDiv.classList.add('pokemon');
+
+                        pokemonDiv.innerHTML = `
+                            <img src="${pokemon.immagineUrl}" alt="Immagine di ${pokemon.nome}">
+                            <h2>${pokemon.nome}</h2>
+                            <p>Tipo: ${pokemon.tipo}</p>
+                        `;
+                        
+                        pokemonListDiv.appendChild(pokemonDiv);
+                    });
+                })
+                .catch(error => console.error('Errore nel caricamento dei Pokémon:', error));
+        }
+
+     // Funzione per controllare lo stato del login
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('/api/auth/current-user');
+                const data = await response.json();
+                
+                const loginBtn = document.getElementById('loginBtn');
+                const registerBtn = document.getElementById('registerBtn');
+                const userInfo = document.getElementById('userInfo');
+                const userNickname = document.getElementById('userNickname');
+                
+                if (data.nickname && data.nickname !== 'anonymous') {
+                    // Utente loggato
+                    loginBtn.style.display = 'none';
+                    registerBtn.style.display = 'none';
+                    userInfo.style.display = 'inline';
+                    userNickname.textContent = data.nickname;
+                } else {
+                    // Utente non loggato
+                    loginBtn.style.display = 'inline';
+                    registerBtn.style.display = 'inline';
+                    userInfo.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Errore nel controllo dello stato del login:', error);
+            }
+        }
+
+        // Funzione per il logout
+        async function handleLogout() {
+            try {
+                const response = await fetch('/api/auth/logout', {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    // Ricarica la pagina dopo il logout
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Errore durante il logout:', error);
+            }
+        }
+
+        // Controlla lo stato del login quando la pagina viene caricata
+        window.onload = function() {
+            checkLoginStatus();
+            searchPokemons();  // Manteniamo la funzione esistente
+        };
+    </script>
+</body>
+</html>
