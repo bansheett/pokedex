@@ -12,7 +12,8 @@ Autenticazione: Spring Security con gestione sessioni (possibile miglioramento c
 
 Database: MySQL
 
-Funzionalità
+
+# Funzionalità
 
 ✅ Gestione dei Pokémon
 
@@ -40,7 +41,8 @@ Scadenza automatica della sessione
 
 Logout con invalidazione della sessione
 
-Struttura del Progetto
+
+# Struttura del Progetto
 
 /pokemon-web-app
 │── src/main/java/com/example/pokemonapp
@@ -68,7 +70,7 @@ Struttura del Progetto
 │   │── templates/
 │── pom.xml
 
-Configurazione del Database
+# Configurazione del Database
 
 Modifica il file application.properties con le credenziali del tuo database:
 
@@ -77,7 +79,8 @@ spring.datasource.username=tuo_username
 spring.datasource.password=tuo_password
 spring.jpa.hibernate.ddl-auto=update
 
-Avvio del Progetto
+
+# Avvio del Progetto
 
 1️⃣ Clona il repository
 
@@ -102,7 +105,8 @@ Apri http://localhost:8080 nel browser
 
 Registrati o accedi con un utente esistente
 
-Possibili Miglioramenti
+
+# Possibili Miglioramenti
 
 🔹 JWT Authentication: Migliorare la gestione delle sessioni con token JWT invece dei session ID.
 🔹 UI Migliorata: Aggiungere React o Vue per un frontend dinamico.
