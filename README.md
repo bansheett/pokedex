@@ -1,4 +1,4 @@
-# Pokémon Web App
+# Pokémon Web App - Still In Progress
 
 Un'applicazione web basata su Spring Boot per visualizzare e filtrare i Pokémon da un database MySQL, con funzionalità di autenticazione e session management.
 
