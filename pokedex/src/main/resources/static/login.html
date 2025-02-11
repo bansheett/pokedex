@@ -83,41 +83,62 @@
     </div>
 
     <script>
-        async function handleLogin(event) {
-            event.preventDefault();
-            const messageDiv = document.getElementById('message');
-            
-            const userData = {
-                nickname: document.getElementById('nickname').value,
-                password: document.getElementById('password').value
-            };
+    async function handleLogin(event) {
+        event.preventDefault();
+        const messageDiv = document.getElementById('message');
 
-            try {
-                const response = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(userData)
-                });
+        const userData = {
+            nickname: document.getElementById('nickname').value,
+            password: document.getElementById('password').value
+        };
 
-                const result = await response.text();
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData),
+                credentials: 'include' // Importante per gestire i cookie di sessione
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                messageDiv.className = 'success-message';
+                messageDiv.textContent = result.message;
                 
-                if (result === "Login riuscito!") {
-                    messageDiv.className = 'success-message';
-                    messageDiv.textContent = result;
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1500);
-                } else {
-                    messageDiv.className = 'error-message';
-                    messageDiv.textContent = result;
-                }
-            } catch (error) {
+                // Salva lo stato di login
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('nickname', userData.nickname);
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
                 messageDiv.className = 'error-message';
-                messageDiv.textContent = "Errore durante il login. Riprova più tardi.";
+                messageDiv.textContent = result.message;
             }
+        } catch (error) {
+            messageDiv.className = 'error-message';
+            messageDiv.textContent = "Errore durante il login. Riprova più tardi.";
         }
+    }
+
+    // Funzione per verificare lo stato del login
+    function checkLoginStatus() {
+        fetch('/api/auth/check', {
+            credentials: 'include'
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = 'index.html';
+            }
+        });
+    }
+
+    // Verifica lo stato del login quando la pagina si carica
+    checkLoginStatus();
     </script>
 </body>
 </html>
