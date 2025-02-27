@@ -4,7 +4,7 @@ Un'applicazione web basata su Spring Boot per visualizzare e filtrare i Pokémon
 
 Tecnologie Utilizzate
 
-Backend: Java, Spring Boot, Spring Security, MySQL
+Backend: Java, Spring Boot, Spring Security, RESTApi, MySQL
 
 Frontend: HTML, CSS, JavaScript
 
