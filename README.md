@@ -10,7 +10,7 @@ Frontend: HTML, CSS, JavaScript
 
 Autenticazione: Spring Security con gestione sessioni (possibile miglioramento con JWT)
 
-Database: MySQL
+Database: MySQLl
 
 
 # Funzionalità
